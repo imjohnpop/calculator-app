@@ -1,0 +1,102 @@
+$gold: rgba(183, 105, 0, 0.84);
+$darkblue: #100a1c;
+$grey: #ccc;
+$darkgrey: #ababab;
+
+body {
+  background: $grey;
+}
+
+sub, sup {
+  position: relative;
+}
+
+sup {
+  top: 0.2rem;
+}
+
+sub {
+  bottom: 0.1rem;
+}
+
+.calculator {
+  position: absolute;
+  background: rgba(2, 0, 44, 0.81);
+  top: 25%;
+  left: 43%;
+  width: 15rem;
+  height: 24.5rem;
+  border: 1px solid $darkblue;
+  border-top: none;
+  border-bottom: 2px solid $darkblue;
+  border-radius: 0.6em;
+  box-shadow: -6px 8px 10px 8px $darkgrey, 6px 8px 8px 8px $darkgrey;
+}
+
+.console {
+  background: transparent;
+  box-sizing: border-box;
+  display: block;
+  width: inherit;
+  text-align: right;
+  font-family: 'Lato', sans-serif;
+  font-size: 3rem;
+  font-weight: 100;
+  color: #fff;
+  border: 0;
+  border-bottom: 1px solid darken($grey, 30%);
+  margin: 20px 0 0 0;
+  padding: 0 0.5rem;
+}
+
+.keyboard {
+  position: absolute;
+  bottom: 0;
+  width: inherit;
+}
+
+.row {
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  .key:last-child {
+    color: #fff;
+    margin-right: 0;
+    background-color: $gold;
+  }
+}
+
+.key {
+  width: 3.5rem;
+  height: 3.5rem;
+  box-sizing: border-box;
+  margin: 3px 3px 3px 3px;
+  cursor: pointer;
+  border: 0;
+  border-radius: 50%;
+  font-family: 'Lato', sans-serif;
+  font-weight: 100;
+  font-size: 1rem;
+  &.dot {
+    font-weight: 300;
+  }
+  &.misc {
+    background-color: darken($grey, 30%);
+    &:active {
+      background-color: darken($grey, 50%);
+    }
+  }
+  &.function {
+    font-size: 1.4rem;
+    &:active {
+      background-color: lighten($gold, 15%);
+    }
+  }
+  &.num {
+    font-weight: 300;
+    font-size: 1.2rem;
+    &:active {
+      background-color: darken($grey, 15%);
+    }
+  }
+}

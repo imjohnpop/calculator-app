@@ -6,45 +6,44 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Calculator</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 
     <div class="calculator">
-        <div class="console">
-            <input class="display" type="text" readonly>
-        </div>
+        <input class="console" type="text" disabled>
         <div class="keyboard">
             <div class="row">
-                <button class="key misc" click="">C</button>
-                <button class="key misc" click=""><sup>+</sup>/<sub>−</sub></button>
-                <button class="key misc" click="">%</button>
-                <button class="key function" click="">÷</button>
+                <button class="key misc" onclick="resetCount()">AC</button>
+                <button class="key misc" onclick="delLast()">C</button>
+                <button class="key misc dot" onclick="use('.')">.</button>
+                <button class="key function" onclick="divide()">÷</button>
             </div>
             <div class="row">
-                <button class="key num" click="">7</button>
-                <button class="key num" click="">8</button>
-                <button class="key num" click="">9</button>
-                <button class="key function" click="">x</button>
+                <button class="key num" onclick="use('7')">7</button>
+                <button class="key num" onclick="use('8')">8</button>
+                <button class="key num" onclick="use('9')">9</button>
+                <button class="key function" onclick="multiply()">x</button>
             </div>
             <div class="row">
-                <button class="key num" click="">4</button>
-                <button class="key num" click="">5</button>
-                <button class="key num" click="">6</button>
-                <button class="key function" click="">-</button>
+                <button class="key num" onclick="use('4')">4</button>
+                <button class="key num" onclick="use('5')">5</button>
+                <button class="key num" onclick="use('6')">6</button>
+                <button class="key function" onclick="subtract()">-</button>
             </div>
             <div class="row">
-                <button class="key num" click="">1</button>
-                <button class="key num" click="">2</button>
-                <button class="key num" click="">3</button>
-                <button class="key function" click="">+</button>
+                <button class="key num" onclick="use('1')">1</button>
+                <button class="key num" onclick="use('2')">2</button>
+                <button class="key num" onclick="use('3')">3</button>
+                <button class="key function" onclick="add()">+</button>
             </div>
             <div class="row">
-                <button class="key num double" click="">0</button>
-                <button class="key misc" click="">.</button>
-                <button class="key function" click="">=</button>
+                <button class="key misc" onclick="changeValue()"><sup>+</sup>/<sub>−</sub></button>
+                <button class="key misc" onclick="getPercentage()">%</button>
+                <button class="key num" onclick="use('0')">0</button>
+                <button class="key function" onclick="equal()">=</button>
             </div>
-
         </div>
     </div>
 
@@ -52,7 +51,117 @@
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script>
-        $( function() {
+        $(document).ready( function() {
+
+            var input = $('input');
+            input.val('0');
+            var action = '';
+            var num1 = input.val();
+            var num2 = input.val();
+
+            resetCount = function() {
+                input.val('0');
+                num1 = input.val();
+                num2 = input.val();
+                action = '';
+                i = 1;
+            };
+
+            delLast = function() {
+                if ( input.val()!=='0' ) {
+                    var number = input.val();
+                    number = number.slice(0, -1);
+                    if (number===''){
+                        number = '0';
+                    }
+                    input.val(number);
+                }
+            };
+
+            use = function(value) {
+                if(value==='.') {
+                    var number = input.val() + value;
+                    input.val(number);
+                } else {
+                    if (input.val()==='0') {
+                        input.val('');
+                    }
+                    var number = input.val() + value;
+                    input.val(number);
+                }
+            };
+
+            changeValue = function() {
+                var number = parseFloat(input.val()) - (parseFloat(input.val()) + parseFloat(input.val()));
+                number = number.toString();
+                input.val(number);
+            };
+
+            getPercentage = function() {
+                input.val((parseFloat(input.val()) / 100).toString());
+            };
+
+            divide = function() {
+                if (action !== '÷') {
+                    action = '÷';
+                    num1 = parseFloat(input.val());
+                    input.val('0');
+                }
+            };
+
+            multiply = function() {
+                if (action !== 'x') {
+                    action = 'x';
+                    num1 = parseFloat(input.val());
+                    input.val('0');
+                }
+            };
+
+            subtract = function() {
+                if (action !== '-') {
+                    action = '-';
+                    num1 = parseFloat(input.val());
+                    input.val('0');
+                }
+            };
+
+            add = function() {
+                if (action !== '+') {
+                    action = '+';
+                    num1 = parseFloat(input.val());
+                    input.val('0');
+                }
+            };
+
+
+            var i = 1;
+            equal = function() {
+                if(input.val()!=='Error'){
+                    if (action==='÷' && input.val()==='0') {
+                        input.val('Error');
+                    } else {
+                        if (i === 1) {
+                            num2 = parseFloat(input.val());
+                        }
+                        switch (action) {
+                            case ('+'):
+                                input.val((num1 + num2 ).toString());
+                                break;
+                            case ('-'):
+                                input.val((num1 - num2 ).toString());
+                                break;
+                            case ('x'):
+                                input.val((num1 * num2 ).toString());
+                                break;
+                            case ('÷'):
+                                input.val((num1 / num2 ).toString());
+                                break;
+                        }
+                        num1 = parseFloat(input.val());
+                        i++;
+                    }
+                }
+            };
 
         });
     </script>
