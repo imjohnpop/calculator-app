@@ -1,12 +1,27 @@
 $gold: rgba(183, 105, 0, 0.84);
 $darkblue: #100a1c;
-$grey: #ccc;
-$darkgrey: #ababab;
+$grey: #ababab;
+$darkgrey: #6c6c6c;
 
+// setting the base sizing for rems
+html {
+  font-size: 20px;
+}
+///////////////////
 body {
   background: $grey;
+  margin: 0;
 }
 
+main {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+// with sub and sup setting the positivity buttons text to alter the height of plus and minus sign
 sub, sup {
   position: relative;
 }
@@ -18,14 +33,11 @@ sup {
 sub {
   bottom: 0.1rem;
 }
-
+///////////////////////////////////
 .calculator {
-  position: absolute;
   background: rgba(2, 0, 44, 0.81);
-  top: 25%;
-  left: 43%;
-  width: 15rem;
-  height: 24.5rem;
+  width: 15.7rem;
+  height: 24rem;
   border: 1px solid $darkblue;
   border-top: none;
   border-bottom: 2px solid $darkblue;
@@ -33,7 +45,7 @@ sub {
   box-shadow: -6px 8px 10px 8px $darkgrey, 6px 8px 8px 8px $darkgrey;
 }
 
-.console {
+.display {
   background: transparent;
   box-sizing: border-box;
   display: block;
@@ -45,32 +57,32 @@ sub {
   color: #fff;
   border: 0;
   border-bottom: 1px solid darken($grey, 30%);
-  margin: 20px 0 0 0;
-  padding: 0 0.5rem;
+  padding: 1.25rem 0.5rem 0;
 }
 
 .keyboard {
-  position: absolute;
-  bottom: 0;
-  width: inherit;
+  width: auto;
+  padding: 0 0.5rem;
+  margin-top: 0.4em;
 }
 
 .row {
+  margin-bottom: 0.4rem;
   padding: 0;
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   .key:last-child {
     color: #fff;
-    margin-right: 0;
     background-color: $gold;
   }
 }
 
 .key {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3.3rem;
+  height: 3.3rem;
   box-sizing: border-box;
-  margin: 3px 3px 3px 3px;
+
   cursor: pointer;
   border: 0;
   border-radius: 50%;
@@ -81,14 +93,17 @@ sub {
     font-weight: 300;
   }
   &.misc {
-    background-color: darken($grey, 30%);
+    background-color: $darkgrey;
     &:active {
-      background-color: darken($grey, 50%);
+      background-color: darken($darkgrey, 15%);
     }
   }
-  &.function {
+  &.function, &.end {
     font-size: 1.4rem;
     &:active {
+      background-color: lighten($gold, 15%);
+    }
+    &.clicked {
       background-color: lighten($gold, 15%);
     }
   }

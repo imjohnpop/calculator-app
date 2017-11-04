@@ -10,159 +10,220 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+<main>
 
     <div class="calculator">
-        <input class="console" type="text" disabled>
+        <input class="display" title="Console" type="text" readonly>
         <div class="keyboard">
             <div class="row">
-                <button class="key misc" onclick="resetCount()">AC</button>
-                <button class="key misc" onclick="delLast()">C</button>
-                <button class="key misc dot" onclick="use('.')">.</button>
-                <button class="key function" onclick="divide()">÷</button>
+                <button class="key misc" onclick="allClear()">AC</button>
+                <button class="key misc" onclick="cut()">C</button>
+                <button class="key misc" onclick="getPercentage()">%</button>
+                <button class="key function" onclick="operation('÷')">÷</button>
             </div>
             <div class="row">
                 <button class="key num" onclick="use('7')">7</button>
                 <button class="key num" onclick="use('8')">8</button>
                 <button class="key num" onclick="use('9')">9</button>
-                <button class="key function" onclick="multiply()">x</button>
+                <button class="key function" onclick="operation('x')">x</button>
             </div>
             <div class="row">
                 <button class="key num" onclick="use('4')">4</button>
                 <button class="key num" onclick="use('5')">5</button>
                 <button class="key num" onclick="use('6')">6</button>
-                <button class="key function" onclick="subtract()">-</button>
+                <button class="key function" onclick="operation('-')">-</button>
             </div>
             <div class="row">
                 <button class="key num" onclick="use('1')">1</button>
                 <button class="key num" onclick="use('2')">2</button>
                 <button class="key num" onclick="use('3')">3</button>
-                <button class="key function" onclick="add()">+</button>
+                <button class="key function" onclick="operation('+')">+</button>
             </div>
             <div class="row">
                 <button class="key misc" onclick="changeValue()"><sup>+</sup>/<sub>−</sub></button>
-                <button class="key misc" onclick="getPercentage()">%</button>
                 <button class="key num" onclick="use('0')">0</button>
-                <button class="key function" onclick="equal()">=</button>
+                <button class="key misc dot" onclick="use('.')">.</button>
+                <button class="key end" onclick="equal()">=</button>
             </div>
         </div>
     </div>
 
-
+</main>
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script>
-        $(document).ready( function() {
+        // document ready function
+        $( function() {
 
+
+            // color change to lighten for operator/function buttons with class clicked
+            // on click of any key removing the class clicked from every key
+            $('.key').click( function () {
+                $('.key').removeClass('clicked');
+            });
+            // on click of key with class function adding class clicked to lighten background color
+            $('.key.function').click( function () {
+                $(this).addClass('clicked');
+            });
+
+
+            // declaring the base line for the calculator
             var input = $('input');
+            // printing 0 as a starting number on calculators display
             input.val('0');
-            var action = '';
+            // setting the variables for start
+            var action;
             var num1 = input.val();
             var num2 = input.val();
 
-            resetCount = function() {
+
+            // AC misc function to clear the display to the base line
+            allClear = function() {
+                // printing 0 as a reset on calculators display
                 input.val('0');
+                // then resetting num1 and num2 to the base as 0
                 num1 = input.val();
                 num2 = input.val();
+                // emptying the action (operator)
                 action = '';
+                // setting the equal counter to base which is one
                 i = 1;
             };
 
-            delLast = function() {
-                if ( input.val()!=='0' ) {
-                    var number = input.val();
-                    number = number.slice(0, -1);
+
+            // C misc function to cut the last input
+            cut = function() {
+                // if display says error
+                if (input.val()==='Error') {
+                    // run AC function
+                    allClear();
+                // if display is different from 0 delete the last number from display
+                } else if ( input.val()!=='0' ) {
+                    var number = input.val().slice(0, -1);
+                    // if there is no number on display
                     if (number===''){
+                        // set it to 0
                         number = '0';
+                        // then resetting num1 and num2 to the base as 0
+                        num1 = input.val();
+                        num2 = input.val();
+                        // setting the equal counter to base which is one
+                        i = 1;
                     }
+                    // print the number 0 to display
                     input.val(number);
                 }
             };
 
+            // inserting numbers
             use = function(value) {
+                // if button dot clicked
                 if(value==='.') {
-                    var number = input.val() + value;
-                    input.val(number);
+                    // check if dot is on dislpay
+                    if (input.val().indexOf('.') <= -1) {
+                        // if not then create decimal with dot
+                        var number = input.val() + value;
+                        // print to display
+                        input.val(number);
+                    }
+                // if button number clicked
                 } else {
+                    // if just number 0 on display
                     if (input.val()==='0') {
+                        // delete it
                         input.val('');
                     }
+                    // set the pressed number
                     var number = input.val() + value;
+                    // print the pressed number
                     input.val(number);
                 }
             };
 
+
+            // changing the positivity of the number
             changeValue = function() {
-                var number = parseFloat(input.val()) - (parseFloat(input.val()) + parseFloat(input.val()));
-                number = number.toString();
+                // by subtracting from the displayed number 200% of the same number
+                var number = (parseFloat(input.val()) - (parseFloat(input.val()) + parseFloat(input.val()))).toString();
+                // printing the opposite number to display
                 input.val(number);
             };
 
+            // getting the percentage by dividing with 100 and outputting it onto the display
             getPercentage = function() {
                 input.val((parseFloat(input.val()) / 100).toString());
             };
 
-            divide = function() {
-                if (action !== '÷') {
-                    action = '÷';
-                    num1 = parseFloat(input.val());
-                    input.val('0');
+            // setting the operator
+            operation = function(value) {
+                switch (value) {
+                    case ('+'):
+                        action = '+';
+                        break;
+                    case ('-'):
+                        action = '-';
+                        break;
+                    case ('x'):
+                        action = 'x';
+                        break;
+                    case ('÷'):
+                        action = '÷';
+                        break;
                 }
-            };
-
-            multiply = function() {
-                if (action !== 'x') {
-                    action = 'x';
-                    num1 = parseFloat(input.val());
-                    input.val('0');
-                }
-            };
-
-            subtract = function() {
-                if (action !== '-') {
-                    action = '-';
-                    num1 = parseFloat(input.val());
-                    input.val('0');
-                }
-            };
-
-            add = function() {
-                if (action !== '+') {
-                    action = '+';
-                    num1 = parseFloat(input.val());
-                    input.val('0');
-                }
+                // setting the equal counter to base which is one
+                i = 1;
+                // saving the first number for equation as num1
+                num1 = parseFloat(input.val());
+                // reseting the display output to 0
+                input.val('0');
             };
 
 
+            // setting the variables for equal function
             var i = 1;
+            var result;
+            var actionCheck;
+            // getting the result
             equal = function() {
+                // if display is not error do...
                 if(input.val()!=='Error'){
+                    // if divided by zero display = error message
                     if (action==='÷' && input.val()==='0') {
+                        // print Error
                         input.val('Error');
                     } else {
-                        if (i === 1) {
+                        // else continue and check if this is the first equal or if it's not
+                        // then check if the previous action is different from the action now
+                        // if not get the new number 2 and the new operator as an action
+                        // to check in the next round of this equal if clicked again
+                        if ( i===1 || actionCheck!==action ) {
                             num2 = parseFloat(input.val());
+                            actionCheck = action;
                         }
+                        // check the what is the action and provide the equation
                         switch (action) {
                             case ('+'):
-                                input.val((num1 + num2 ).toString());
+                                result = (num1 + num2 ).toString();
                                 break;
                             case ('-'):
-                                input.val((num1 - num2 ).toString());
+                                result = (num1 - num2 ).toString();
                                 break;
                             case ('x'):
-                                input.val((num1 * num2 ).toString());
+                                result = (num1 * num2 ).toString();
                                 break;
                             case ('÷'):
-                                input.val((num1 / num2 ).toString());
+                                result = (num1 / num2 ).toString();
                                 break;
                         }
+                        // print result
+                        input.val(result);
+                        // take the result number as a num1 if the user would press equal again
                         num1 = parseFloat(input.val());
+                        // rise the variable i to count which equal round will be the next
                         i++;
                     }
                 }
             };
-
         });
     </script>
 </body>
